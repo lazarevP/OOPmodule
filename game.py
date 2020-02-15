@@ -1,29 +1,31 @@
-from OOPmodule import exceptions
-from OOPmodule import settings
-from OOPmodule import models
+import exceptions
+import settings
+import models
 """
 this file contain the maine information 
 """
+score = 0
+name = input("Enter your name: ")
 
 
 def play():
     """
     play function
     """
-    settings.name = input("Enter your name ")
+    global score
+    start = None
+    while start != "start":
+        start = input("Enter 'start' for the beginning\n")
 
-    while settings.start != "start":
-        settings.start = input("Enter 'start' for the beginning\n")
-
-    player = models.Player(settings.name, settings.your_lives, settings.score)
+    player = models.Player(name, settings.your_lives)
     enemy = models.Enemy(settings.level)
     while True:
         try:
             models.Player.attack(player, enemy)
             models.Player.defence(player, enemy)
         except exceptions.EnemyDown:
-            settings.score += 5
-            print(f"Enemy number {settings.level} defeated\nYour current score is {settings.score}")
+            score += 5
+            print(f"Enemy number {settings.level} defeated\nYour current score is {score}")
             settings.level += 1
             enemy = models.Enemy(settings.level)
 
@@ -35,8 +37,8 @@ def main():
     try:
         play()
     except exceptions.GameOver:
-        exceptions.GameOver.saving_score_method()
-        print(f"Game over, mr.{settings.name}\nYour score is {settings.score}")
+        exceptions.GameOver.saving_score_method(name, score)
+        print(f"Game over, {name}\nYour score is {score}")
     except KeyboardInterrupt:
         pass
     finally:

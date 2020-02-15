@@ -1,13 +1,12 @@
-from OOPmodule import settings
 """exceptions file"""
+
 
 class GameOver(Exception):
     @staticmethod
-    def saving_score_method():
+    def saving_score_method(name, score):
         with open("scores.txt", "a") as scores:
-            scores.write(f'{settings.name}, {settings.score}\n')
-            scores.close()
-            return print("String was added")
+            scores.write(f'Player - {name}, score - {score}\n')
+            return scores.close()
 
 
 class EnemyDown(Exception):

@@ -3,64 +3,78 @@ This file include information about Player and Enemy functions
 """
 from random import randint
 
-from OOPmodule import settings
-from OOPmodule import exceptions
+import settings
+import exceptions
 
 
 class Enemy:
     """
     describe everything about enemy
     """
+
     def __init__(self, level):
+        """define enemy level and lives"""
         self.level = level
-    """define level"""
+        self.lives = level
 
     @staticmethod
     def select_attack():
+        """generate random integer"""
         return randint(1, 3)
-    """generate random integer"""
 
     def decrease_enemy_lives(self):
-        self.level -= 1
-        if self.level == 0:
+        """decreasing method"""
+        self.lives -= 1
+        if self.lives == 0:
             raise exceptions.EnemyDown
-    """decreasing method"""
 
 
 class Player:
-    def __init__(self, name, your_lives, score):
+    """
+    describe everything about player
+    """
+
+    def __init__(self, name, your_lives):
+        """describe character"""
         self.name = name
         self.your_lives = your_lives
-        self.score = score
-        """describe character"""
 
     @staticmethod
     def fight(attack, defence):
+        """show the result"""
         if attack == 1:
             if defence == 1:
                 result = 0
             elif defence == 2:
                 result = 1
-            else:
+            elif defence == 3:
                 result = -1
+            else:
+                result = 404
         elif attack == 2:
             if defence == 1:
                 result = -1
             elif defence == 2:
                 result = 0
-            else:
+            elif defence == 3:
                 result = 1
-        else:
+            else:
+                result = 404
+        elif attack == 3:
             if defence == 1:
                 result = 1
             elif defence == 2:
                 result = -1
-            else:
+            elif defence == 3:
                 result = 0
+            else:
+                result = 404
+        else:
+            result = 404
         return result
-    """show the resul"""
 
     def decrease_lives(self):
+        """decreasing lives method"""
         self.your_lives -= 1
         if self.your_lives == 0:
             raise exceptions.GameOver
@@ -69,38 +83,42 @@ class Player:
         """
         attack method
         """
-        your_character = input("Choose the character for attack:\n"
-                               f"1 - {settings.characters[0]}\n"
-                               f"2 - {settings.characters[1]}\n"
-                               f"3 - {settings.characters[2]}\n")
+        your_character = int(input("Choose the character for attack:\n"
+                                   f"1 - {settings.characters[0]}\n"
+                                   f"2 - {settings.characters[1]}\n"
+                                   f"3 - {settings.characters[2]}\n"))
 
         enemy_character = Enemy.select_attack()
+        calling_fight_method_for_attack = Player.fight(attack=your_character, defence=enemy_character)
 
-        if self.fight(attack=your_character, defence=enemy_character) == 0:
-            print(f'It\'s draw!\nYou current score is {settings.score}\nYour current lives is {self.your_lives}')
-        elif self.fight(attack=your_character, defence=enemy_character) == 1:
+        if calling_fight_method_for_attack == 0:
+            print(f'It\'s draw!\nYour current lives is {self.your_lives}')
+        elif calling_fight_method_for_attack == 1:
             enemy_obj.decrease_enemy_lives()
-            print(f'You attacked successfully!\nYou current score is {settings.score}\n'
-                  f'Your current lives is {self.your_lives}')
+            print(f'You attacked successfully!\nYour current lives is {self.your_lives}')
+        elif calling_fight_method_for_attack == -1:
+            print(f'You missed!\nYour current lives is {self.your_lives}')
         else:
-            print(f'You missed!\nYou current score is {settings.score}\nYour current lives is {self.your_lives}')
+            print("You chose an incorrect number. Pres 1, 2 or 3")
 
     def defence(self, enemy_obj):
         """
         defence method
         """
-        your_character = input("Choose the character for defence:\n"
-                               f"1 - {settings.characters[0]}\n"
-                               f"2 - {settings.characters[1]}\n"
-                               f"3 - {settings.characters[2]}\n")
+        your_character = int(input("Choose the character for attack:\n"
+                                   f"1 - {settings.characters[0]}\n"
+                                   f"2 - {settings.characters[1]}\n"
+                                   f"3 - {settings.characters[2]}\n"))
 
         enemy_character = enemy_obj.select_attack()
+        calling_fight_method_for_defence = Player.fight(attack=enemy_character, defence=your_character)
 
-        if self.fight(attack=enemy_character, defence=your_character) == 0:
-            print(f'It\'s draw!\nYou current score is {settings.score}\nYour current lives is {self.your_lives}')
-        elif self.fight(attack=enemy_character, defence=your_character) == 1:
+        if calling_fight_method_for_defence == 0:
+            print(f'It\'s draw!\nYour current lives is {self.your_lives}')
+        elif calling_fight_method_for_defence == 1:
             self.decrease_lives()
-            print(f'Enemy attacked successfully!\nYou current score is {settings.score}\n'
-                  f'Your current lives is {self.your_lives}')
+            print(f'Enemy attacked successfully!\nYour current lives is {self.your_lives}')
+        elif calling_fight_method_for_defence == -1:
+            print(f'Enemy missed!\nYour current lives is {self.your_lives}')
         else:
-            print(f'Enemy missed!\nYou current score is {settings.score}\nYour current lives is {self.your_lives}')
+            print("You chose an incorrect number. Pres 1, 2 or 3")
