@@ -42,35 +42,14 @@ class Player:
     @staticmethod
     def fight(attack, defence):
         """show the result"""
-        if attack == 1:
-            if defence == 1:
-                result = 0
-            elif defence == 2:
-                result = 1
-            elif defence == 3:
-                result = -1
-            else:
-                result = 404
-        elif attack == 2:
-            if defence == 1:
-                result = -1
-            elif defence == 2:
-                result = 0
-            elif defence == 3:
-                result = 1
-            else:
-                result = 404
-        elif attack == 3:
-            if defence == 1:
-                result = 1
-            elif defence == 2:
-                result = -1
-            elif defence == 3:
-                result = 0
-            else:
-                result = 404
+        if attack == defence:
+            result = 0
+        elif attack == 1 and defence == 2 or attack == 2 and defence == 3 or attack == 3 and defence == 1:
+            result = 1
+        elif attack == 3 and defence == 2 or attack == 2 and defence == 1 or attack == 1 and defence == 3:
+            result = -1
         else:
-            result = 404
+            result = None
         return result
 
     def decrease_lives(self):
